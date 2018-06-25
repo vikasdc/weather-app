@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Weather services</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <style>
+    body{
+        margin:0;
+        background-image: url("clouds.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100vh;
+        background-attachment: fixed;
+        
+    }
+    .overlay{
+        background: rgba(0, 0, 0,0.4);
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 109vh;
+        background-attachment: fixed;
+    }
+    #data{
+        font-size:1.6em;
+        font-family:segoe ui symbol;
+    }
+    #wicon{
+        height:45px;
+        background-image: url("//cdn.apixu.com/weather/64x64/day/116.png");
+        background-repeat: no-repeat;
+         
+    }
+    .footer{
+        background-color: rgba(152, 204, 235, 0.4);
+        font-size:1.1em;
+        font-family: segoe ui symbol;
+        text-transform: capitalize;
+        color:white;
+    }
+  </style>
+</head>
+  <body>
+      <div class="overlay">
+     <div class="container">
+         <h1 class="display-4 text-center text-white">Welcome to Weather Brodcasting App.</h1>
+         <h5 class="h1 text-white text-center mt-4 ">Enter your city name.</h5>
+         <form>
+             <div class="form-group">
+                 <input type="text" class="form-control mt-5 mb-4 w-75 mx-auto text-primary" placeholder="Enter your city name" id="cityname">                           
+                </div>
+                <div class="text-center">
+                        <button type="button" class="btn btn-success mt-1" id="getweather">Get Weather</button>
+                </div>
+         </form>
+         <h5 class="d-none display-4 text-white mt-2 mb-4 text-center" id="text">Here is today's weather.</h5>
+          <div class="main mt-3">
+              <div class="container">
+                <div class="alert alert-dark d-none mb-1" id="alert">
+                   
+                       <h4 class="h4 text-capitalize"><span id="place"></span></h4>
+                       <strong class="text-capitalize"><span id="time"></span></strong>
+                       <br>
+                       <strong class="text-capitalize"><span id="condition"></span></strong>
+                       
+                       
+                       <div id="wicon"></div>
+                       <h1 class="display-2 text-capitalize mt-1 text-center"><span id="celcius"></span><sup><small>&deg;c </small></sup>/ <span id="farenheight"></span><sup><small>&deg;f</small></sup></h1>
+                       <div class="text-center mt-4">
+                       <h5 class="h5 text-capitalize">feels like <span id="feelslikec"></span><sup><small>&deg;c </small></sup>/ <span id="feelslikef"></span><sup><small>&deg;f</small></sup></h5>
+                       <h5 class="h5 text-capitalize">precepitation: <span id="precip"></span></h5>
+                        <h5 class="h5 text-capitalize">humidity: <span id="humidity"></span></h5>
+                        <h5 class="h5">Wind Speed: <span id="windkph"></span></h5>
+                        <h5 class="h5 text-capitalize">Wind Direction: <span id="winddir"></span></h5>
+                        <h5 class="h5 text-capitalize">cloud: <span id="cloud"></span></h5>
+                        <h6 class="h6 text-right">Last updated at <span id="last"></span></h6>
+                </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <footer class="footer fixed-bottom text-center">copyright vikas &copy;2018</footer> 
+     </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+    $(function(){
+        
+        $("#getweather").click(function(){
+            if($("#cityname").val()==""){
+           alert("enter city name");
+            }
+            else{
+          $("#text").addClass("d-block");
+          
+          var cityname = $("#cityname").val();    
+          var url = "http://api.apixu.com/v1/current.json?key=7de574a469de46deaa692344181906&q="+cityname;
+          //window.open(url);
+          $.getJSON(url, function(data){
+          
+          $("#place").html(data.location.name+", "+data.location.region);
+         var d = new Date();
+         var y = d.getHours();
+         var z = d.getMinutes();
+         var a = d.getSeconds();
+         var x = d.getDay();
+         var days = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
+        
+        $("#time").html(days[x]+", "+y+":"+z+":"+a);
+         
+         $("#condition").html(data.current.condition.text)
+           
+           $("#celcius").html(data.current.temp_c);
+
+           $("#farenheight").html(data.current.temp_f);
+
+            $("#feelslikec").html(data.current.feelslike_c);
+           
+            $("#feelslikef").html(data.current.feelslike_f);
+            
+            $("#precip").html(data.current.precip_in+"%");
+             
+            $("#humidity").html(data.current.humidity+"%");
+             
+            $("#windkph").html(data.current.wind_kph+" km/h");
+             
+            $("#winddir").html(data.current.wind_dir);
+             
+            $("#cloud").html(data.current.cloud+"%");
+
+            $("#last").html(data.current.last_updated);
+             
+            $("#alert").addClass("d-block");
+          });
+            }
+    });
+    
+    
+    
+    });
+    </script>  
+     
+
+</body>
+</html>
